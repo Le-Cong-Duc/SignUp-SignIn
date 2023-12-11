@@ -25,7 +25,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import DAO.UserDAO;
 import JDBC.ConnectionJDBC;
+import Model.Users;
 import SignIn.SignIn;
 
 public class SignUp extends JFrame {
@@ -138,17 +140,14 @@ public class SignUp extends JFrame {
 				Connection conn = null;
 
 				try {
-					conn = jdbc.getConnection();
+					String username = txtUser.getText();
+					String pass = txtpassword.getText();
+					String name = txtname.getText();
 
-					String sql = "INSERT INTO USERS (username,pass,hovaten)\r\n" + "VALUES (?, ?, ?)";
+					Users user = new Users(username, pass, name);
+					UserDAO.getInstance().insert(user);
 
-					PreparedStatement pstm = conn.prepareStatement(sql);
-					pstm.setString(1, txtUser.getText().toString());
-					pstm.setString(2, txtpassword.getText().toString());
-					pstm.setString(3, txtname.getText().toString());
-					
-					if (txtname.getText().equals("") || txtUser.getText().equals("")
-							|| txtpassword.getText().equals("")) {
+					if (username.equals("") || pass.equals("") || name.equals("")) {
 						JOptionPane.showMessageDialog(null, "Vui long nhap day du thong tin");
 					} else {
 						JOptionPane.showMessageDialog(null, "Đăng kí thành công");
